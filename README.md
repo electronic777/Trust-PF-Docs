@@ -324,40 +324,16 @@ flowchart TD
   }
 }}%%
 flowchart TD
- subgraph qualification["Квалификация лида"]
-    leadDistribution["Интеллектуальное распределение
-    ⚙️ Система"] 
+    dataEnrichment["Обогащение данных\n⚙️ Система"] --> qualificationCheck["Квалификация по чек-листу\n📋 Квалификатор"]
+    qualificationCheck --> leadVerdict{"Целевой лид?"}
+    leadVerdict -- "Нет" --> notTarget["Лид нецелевой"]
+    leadVerdict -- "Да" --> targetSegmentation["Сегментация по продукту/услуге\n📋 Квалификатор"]
     
-    dataEnrichment["Обогащение данных
-    ⚙️ Система"]
-    
-    qualificationCheck["Квалификация по чек-листу
-    📋 Квалификатор"]
-    
-    leadVerdict{"Целевой лид?"}
-    
-    notTarget["Лид нецелевой"]
-    
-    targetSegmentation["Сегментация по продукту/услуге
-    📋 Квалификатор"]
-    
-    leadDistribution --> dataEnrichment
-    dataEnrichment --> qualificationCheck
-    qualificationCheck --> leadVerdict
-    leadVerdict -- "Нет" --> notTarget
-    leadVerdict -- "Да" --> targetSegmentation
- end
- 
- %% Стили для блоков
- style qualification fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
- 
- %% Стили для элементов
- style leadDistribution fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
- style dataEnrichment fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
- style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
- style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
- style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
- style targetSegmentation fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+    style dataEnrichment fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+    style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
+    style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+    style targetSegmentation fill:#f6ffed,stroke:#52c41a,stroke-width:1px
 ```
 
 ### 2.1 Интеллектуальное распределение
