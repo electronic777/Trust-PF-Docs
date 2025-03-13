@@ -49,16 +49,153 @@
   }
 }}%%
 flowchart TD
-    dataEnrichment["Обогащение данных\n⚙️ Система"] --> qualificationCheck["Квалификация по чек-листу\n📋 Квалификатор"]
-    qualificationCheck --> leadVerdict{"Целевой лид?"}
-    leadVerdict -- "Нет" --> notTarget["Лид нецелевой"]
-    leadVerdict -- "Да" --> targetSegmentation["Сегментация по продукту/услуге\n📋 Квалификатор"]
+ subgraph capture["Захват и регистрация лида"]
+    newLead["Новый лид"] --> multiChannel["Мультиканальный захват
+    ⚙️ Система
+    (API-интеграции, сбор из всех каналов)"]
     
-    style dataEnrichment fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
-    style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
-    style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
-    style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
-    style targetSegmentation fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    multiChannel --> initialData["Первичные данные лида
+    📄 Контакты, источник, запрос"]
+    
+    initialData --> autoScoring["Автоматический скоринг
+    ⚙️ Система
+    (оценка полноты данных, вес источника)"]
+    
+    autoScoring --> leadScore["Лид оценен и приоритизирован
+    🔢 Скоринговый балл, приоритет, SLA"]
+ end
+ 
+ subgraph qualification["Квалификация лида"]
+    leadDistribution["Интеллектуальное распределение
+    ⚙️ Система
+    (учет загрузки, компетенций)"] 
+    
+    dataEnrichment["Обогащение данных
+    ⚙️ Система
+    (проверка юр.лица, история)"]
+    
+    qualificationCheck["Квалификация по чек-листу
+    📋 Квалификатор
+    (потребности, бюджет, сроки)"]
+    
+    leadVerdict{"Целевой лид?
+    (соответствие профилю)"}
+    
+    notTarget["Лид нецелевой
+    ❌ Причины отказа"]
+    
+    targetSegmentation["Сегментация по продукту/услуге
+    📋 Квалификатор
+    (подбор решения)"]
+ end
+ 
+ subgraph processing["Обработка лида"]
+    expertAssignment["Автоматический подбор эксперта
+    ⚙️ Система
+    (по продукту, загрузке)"]
+    
+    welcomeMessage["Автоматическое приветственное письмо
+    ⚙️ Система
+    (персонализация, материалы)"]
+    
+    scheduleContact["Оптимальное время контакта
+    ⚙️ Система
+    (анализ активности)"]
+    
+    expertContact["Связь с клиентом
+    👤 Эксперт
+    (установление контакта)"]
+    
+    deepQualification["Углубленная квалификация
+    👤 Эксперт
+    (детализация требований)"]
+    
+    proposalGeneration["Генерация предложения
+    ⚙️ Система
+    (персонализация КП)"]
+    
+    clientFeedback{"Есть интерес?
+    (оценка реакции)"}
+    
+    rejection["Отказ клиента
+    📝 Причины, обратная связь"]
+ end
+ 
+ subgraph conversion["Конвертация в сделку"]
+    dealCreation["Создание сделки в CRM
+    ⚙️ Система
+    (тип сделки, стадия)"]
+    
+    dataTransfer["Передача всей истории и данных
+    ⚙️ Система
+    (коммуникации, потребности)"]
+    
+    salesProcess["Запуск процесса продажи
+    👤 Менеджер продаж
+    (план работы, контрольные точки)"]
+    
+    analyticsCollection["Сбор данных для аналитики
+    ⚙️ Система
+    (метрики, KPI, прогнозы)"]
+ end
+
+ %% Соединения между блоками и этапами
+ leadScore --> leadDistribution
+ leadDistribution --> dataEnrichment
+ dataEnrichment --> qualificationCheck
+ qualificationCheck --> leadVerdict
+ leadVerdict -- "Нет" --> notTarget
+ leadVerdict -- "Да" --> targetSegmentation
+ targetSegmentation --> expertAssignment
+ expertAssignment --> welcomeMessage
+ welcomeMessage --> scheduleContact
+ scheduleContact --> expertContact
+ expertContact --> deepQualification
+ deepQualification --> proposalGeneration
+ proposalGeneration --> clientFeedback
+ clientFeedback -- "Нет" --> rejection
+ clientFeedback -- "Да" --> dealCreation
+ dealCreation --> dataTransfer
+ dataTransfer --> salesProcess
+ salesProcess --> analyticsCollection
+ 
+ %% Аналитические соединения
+ rejection --> analyticsCollection
+ notTarget --> analyticsCollection
+ 
+ %% Стили для блоков
+ style capture fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style qualification fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style processing fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style conversion fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ 
+ %% Стили для элементов
+ style newLead fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style multiChannel fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style initialData fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style autoScoring fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style leadScore fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ 
+ style leadDistribution fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style dataEnrichment fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
+ style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+ style targetSegmentation fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ 
+ style expertAssignment fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style welcomeMessage fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style scheduleContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style expertContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style deepQualification fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style proposalGeneration fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style clientFeedback fill:#f6f6f6,stroke:#666,stroke-width:1px
+ style rejection fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+ 
+ style dealCreation fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ style dataTransfer fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ style salesProcess fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ style analyticsCollection fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
 ```
 
 ## 1. Захват и регистрация лида
@@ -69,6 +206,17 @@ flowchart TD
 ### Схема этапа
 
 ```mermaid
+%%{init: {
+  'theme': 'neutral',
+  'themeVariables': {
+    'primaryColor': '#f4f4f4',
+    'primaryTextColor': '#333',
+    'primaryBorderColor': '#ddd',
+    'lineColor': '#666',
+    'secondaryColor': '#f0f7ff',
+    'tertiaryColor': '#fff'
+  }
+}}%%
 flowchart TD
  subgraph capture["Захват и регистрация лида"]
     newLead["Новый лид"] --> multiChannel["Мультиканальный захват
@@ -85,10 +233,14 @@ flowchart TD
  end
  
  %% Стили для блоков
- classDef captureBlock fill:#e6f7ff,stroke:#1890ff
+ style capture fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
  
- %% Применение стилей
- capture:::captureBlock
+ %% Стили для элементов
+ style newLead fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style multiChannel fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style initialData fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style autoScoring fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+ style leadScore fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
 ```
 
 ### 1.1 Мультиканальный захват
@@ -160,6 +312,17 @@ flowchart TD
 ### Схема этапа
 
 ```mermaid
+%%{init: {
+  'theme': 'neutral',
+  'themeVariables': {
+    'primaryColor': '#f4f4f4',
+    'primaryTextColor': '#333',
+    'primaryBorderColor': '#ddd',
+    'lineColor': '#666',
+    'secondaryColor': '#f0f7ff',
+    'tertiaryColor': '#fff'
+  }
+}}%%
 flowchart TD
  subgraph qualification["Квалификация лида"]
     leadDistribution["Интеллектуальное распределение
@@ -186,10 +349,15 @@ flowchart TD
  end
  
  %% Стили для блоков
- classDef qualificationBlock fill:#f6ffed,stroke:#52c41a
+ style qualification fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
  
- %% Применение стилей
- qualification:::qualificationBlock
+ %% Стили для элементов
+ style leadDistribution fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style dataEnrichment fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+ style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
+ style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+ style targetSegmentation fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
 ```
 
 ### 2.1 Интеллектуальное распределение
@@ -277,6 +445,17 @@ flowchart TD
 ### Схема этапа
 
 ```mermaid
+%%{init: {
+  'theme': 'neutral',
+  'themeVariables': {
+    'primaryColor': '#f4f4f4',
+    'primaryTextColor': '#333',
+    'primaryBorderColor': '#ddd',
+    'lineColor': '#666',
+    'secondaryColor': '#f0f7ff',
+    'tertiaryColor': '#fff'
+  }
+}}%%
 flowchart TD
  subgraph processing["Обработка лида"]
     expertAssignment["Автоматический подбор эксперта
@@ -313,10 +492,18 @@ flowchart TD
  end
  
  %% Стили для блоков
- classDef processingBlock fill:#fff2e8,stroke:#fa8c16
+ style processing fill:#f6ffed,stroke:#52c41a,stroke-width:1px
  
- %% Применение стилей
- processing:::processingBlock
+ %% Стили для элементов
+ style expertAssignment fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style welcomeMessage fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style scheduleContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style expertContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style deepQualification fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style proposalGeneration fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+ style clientFeedback fill:#f6f6f6,stroke:#666,stroke-width:1px
+ style rejection fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+ style dealFlow fill:#f6ffed,stroke:#52c41a,stroke-width:1px
 ```
 
 ### 3.1 Автоматический подбор эксперта
@@ -439,6 +626,17 @@ flowchart TD
 ### Схема этапа
 
 ```mermaid
+%%{init: {
+  'theme': 'neutral',
+  'themeVariables': {
+    'primaryColor': '#f4f4f4',
+    'primaryTextColor': '#333',
+    'primaryBorderColor': '#ddd',
+    'lineColor': '#666',
+    'secondaryColor': '#f0f7ff',
+    'tertiaryColor': '#fff'
+  }
+}}%%
 flowchart TD
  subgraph conversion["Конвертация в сделку"]
     dealCreation["Создание сделки в CRM
@@ -459,10 +657,13 @@ flowchart TD
  end
  
  %% Стили для блоков
- classDef conversionBlock fill:#f9f0ff,stroke:#722ed1
+ style conversion fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
  
- %% Применение стилей
- conversion:::conversionBlock
+ %% Стили для элементов
+ style dealCreation fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ style dataTransfer fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ style salesProcess fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
+ style analyticsCollection fill:#f9f0ff,stroke:#722ed1,stroke-width:1px
 ```
 
 ### 4.1 Создание сделки в CRM
