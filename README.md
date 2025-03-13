@@ -218,7 +218,6 @@ flowchart TD
   }
 }}%%
 flowchart TD
- subgraph capture["Захват и регистрация лида"]
     newLead["Новый лид"] --> multiChannel["Мультиканальный захват
     ⚙️ Система"]
     
@@ -230,17 +229,13 @@ flowchart TD
     
     autoScoring --> leadScore["Лид оценен и приоритизирован
     🔢 Скоринговый балл, приоритет, SLA"]
- end
  
- %% Стили для блоков
- style capture fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
- 
- %% Стили для элементов
- style newLead fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
- style multiChannel fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
- style initialData fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
- style autoScoring fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
- style leadScore fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    %% Стили для элементов
+    style newLead fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    style multiChannel fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    style initialData fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    style autoScoring fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    style leadScore fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
 ```
 
 ### 1.1 Мультиканальный захват
@@ -324,16 +319,35 @@ flowchart TD
   }
 }}%%
 flowchart TD
-    dataEnrichment["Обогащение данных\n⚙️ Система"] --> qualificationCheck["Квалификация по чек-листу\n📋 Квалификатор"]
-    qualificationCheck --> leadVerdict{"Целевой лид?"}
-    leadVerdict -- "Нет" --> notTarget["Лид нецелевой"]
-    leadVerdict -- "Да" --> targetSegmentation["Сегментация по продукту/услуге\n📋 Квалификатор"]
+    leadDistribution["Интеллектуальное распределение
+    ⚙️ Система"] 
     
-    style dataEnrichment fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    dataEnrichment["Обогащение данных
+    ⚙️ Система"]
+    
+    qualificationCheck["Квалификация по чек-листу
+    📋 Квалификатор"]
+    
+    leadVerdict{"Целевой лид?"}
+    
+    notTarget["Лид нецелевой"]
+    
+    targetSegmentation["Сегментация по продукту/услуге
+    📋 Квалификатор"]
+    
+    leadDistribution --> dataEnrichment
+    dataEnrichment --> qualificationCheck
+    qualificationCheck --> leadVerdict
+    leadVerdict -- "Нет" --> notTarget
+    leadVerdict -- "Да" --> targetSegmentation
+ 
+    %% Стили для элементов
+    style leadDistribution fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+    style dataEnrichment fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
     style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
     style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
     style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
-    style targetSegmentation fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style targetSegmentation fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
 ```
 
 ### 2.1 Интеллектуальное распределение
@@ -433,7 +447,6 @@ flowchart TD
   }
 }}%%
 flowchart TD
- subgraph processing["Обработка лида"]
     expertAssignment["Автоматический подбор эксперта
     ⚙️ Система"]
     
@@ -456,6 +469,8 @@ flowchart TD
     
     rejection["Отказ клиента"]
     
+    dealFlow["Переход к созданию сделки"]
+    
     expertAssignment --> welcomeMessage
     welcomeMessage --> scheduleContact
     scheduleContact --> expertContact
@@ -464,22 +479,17 @@ flowchart TD
     proposalGeneration --> clientFeedback
     clientFeedback -- "Нет" --> rejection
     clientFeedback -- "Да" --> dealFlow
-    dealFlow["Переход к созданию сделки"]
- end
  
- %% Стили для блоков
- style processing fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- 
- %% Стили для элементов
- style expertAssignment fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- style welcomeMessage fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- style scheduleContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- style expertContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- style deepQualification fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- style proposalGeneration fill:#f6ffed,stroke:#52c41a,stroke-width:1px
- style clientFeedback fill:#f6f6f6,stroke:#666,stroke-width:1px
- style rejection fill:#fff0f0,stroke:#ff7875,stroke-width:1px
- style dealFlow fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    %% Стили для элементов
+    style expertAssignment fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style welcomeMessage fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style scheduleContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style expertContact fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style deepQualification fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style proposalGeneration fill:#f6ffed,stroke:#52c41a,stroke-width:1px
+    style clientFeedback fill:#f6f6f6,stroke:#666,stroke-width:1px
+    style rejection fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+    style dealFlow fill:#f6ffed,stroke:#52c41a,stroke-width:1px
 ```
 
 ### 3.1 Автоматический подбор эксперта
