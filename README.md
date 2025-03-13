@@ -49,131 +49,16 @@
   }
 }}%%
 flowchart TD
- subgraph capture["Захват и регистрация лида"]
-    newLead["Новый лид"] --> multiChannel["Мультиканальный захват
-    ⚙️ Система
-    (API-интеграции, сбор из всех каналов)"]
+    dataEnrichment["Обогащение данных\n⚙️ Система"] --> qualificationCheck["Квалификация по чек-листу\n📋 Квалификатор"]
+    qualificationCheck --> leadVerdict{"Целевой лид?"}
+    leadVerdict -- "Нет" --> notTarget["Лид нецелевой"]
+    leadVerdict -- "Да" --> targetSegmentation["Сегментация по продукту/услуге\n📋 Квалификатор"]
     
-    multiChannel --> initialData["Первичные данные лида
-    📄 Контакты, источник, запрос"]
-    
-    initialData --> autoScoring["Автоматический скоринг
-    ⚙️ Система
-    (оценка полноты данных, вес источника)"]
-    
-    autoScoring --> leadScore["Лид оценен и приоритизирован
-    🔢 Скоринговый балл, приоритет, SLA"]
- end
- 
- subgraph qualification["Квалификация лида"]
-    leadDistribution["Интеллектуальное распределение
-    ⚙️ Система
-    (учет загрузки, компетенций)"] 
-    
-    dataEnrichment["Обогащение данных
-    ⚙️ Система
-    (проверка юр.лица, история)"]
-    
-    qualificationCheck["Квалификация по чек-листу
-    📋 Квалификатор
-    (потребности, бюджет, сроки)"]
-    
-    leadVerdict{"Целевой лид?
-    (соответствие профилю)"}
-    
-    notTarget["Лид нецелевой
-    ❌ Причины отказа"]
-    
-    targetSegmentation["Сегментация по продукту/услуге
-    📋 Квалификатор
-    (подбор решения)"]
- end
- 
- subgraph processing["Обработка лида"]
-    expertAssignment["Автоматический подбор эксперта
-    ⚙️ Система
-    (по продукту, загрузке)"]
-    
-    welcomeMessage["Автоматическое приветственное письмо
-    ⚙️ Система
-    (персонализация, материалы)"]
-    
-    scheduleContact["Оптимальное время контакта
-    ⚙️ Система
-    (анализ активности)"]
-    
-    expertContact["Связь с клиентом
-    👤 Эксперт
-    (установление контакта)"]
-    
-    deepQualification["Углубленная квалификация
-    👤 Эксперт
-    (детализация требований)"]
-    
-    proposalGeneration["Генерация предложения
-    ⚙️ Система
-    (персонализация КП)"]
-    
-    clientFeedback{"Есть интерес?
-    (оценка реакции)"}
-    
-    rejection["Отказ клиента
-    📝 Причины, обратная связь"]
- end
- 
- subgraph conversion["Конвертация в сделку"]
-    dealCreation["Создание сделки в CRM
-    ⚙️ Система
-    (тип сделки, стадия)"]
-    
-    dataTransfer["Передача всей истории и данных
-    ⚙️ Система
-    (коммуникации, потребности)"]
-    
-    salesProcess["Запуск процесса продажи
-    👤 Менеджер продаж
-    (план работы, контрольные точки)"]
-    
-    analyticsCollection["Сбор данных для аналитики
-    ⚙️ Система
-    (метрики, KPI, прогнозы)"]
- end
-
- %% Соединения между блоками и этапами
- leadScore --> leadDistribution
- leadDistribution --> dataEnrichment
- dataEnrichment --> qualificationCheck
- qualificationCheck --> leadVerdict
- leadVerdict -- "Нет" --> notTarget
- leadVerdict -- "Да" --> targetSegmentation
- targetSegmentation --> expertAssignment
- expertAssignment --> welcomeMessage
- welcomeMessage --> scheduleContact
- scheduleContact --> expertContact
- expertContact --> deepQualification
- deepQualification --> proposalGeneration
- proposalGeneration --> clientFeedback
- clientFeedback -- "Нет" --> rejection
- clientFeedback -- "Да" --> dealCreation
- dealCreation --> dataTransfer
- dataTransfer --> salesProcess
- salesProcess --> analyticsCollection
- 
- %% Аналитические соединения
- rejection --> analyticsCollection
- notTarget --> analyticsCollection
- 
- %% Стили для блоков
- classDef captureBlock fill:#e6f7ff,stroke:#1890ff
- classDef qualificationBlock fill:#f6ffed,stroke:#52c41a
- classDef processingBlock fill:#fff2e8,stroke:#fa8c16
- classDef conversionBlock fill:#f9f0ff,stroke:#722ed1
- 
- %% Применение стилей
- capture:::captureBlock
- qualification:::qualificationBlock
- processing:::processingBlock
- conversion:::conversionBlock
+    style dataEnrichment fill:#e6f7ff,stroke:#1890ff,stroke-width:1px
+    style qualificationCheck fill:#f0f7ff,stroke:#4d94ff,stroke-width:1px
+    style leadVerdict fill:#f6f6f6,stroke:#666,stroke-width:1px
+    style notTarget fill:#fff0f0,stroke:#ff7875,stroke-width:1px
+    style targetSegmentation fill:#f6ffed,stroke:#52c41a,stroke-width:1px
 ```
 
 ## 1. Захват и регистрация лида
