@@ -37,6 +37,17 @@
 ## Общая схема процесса
 
 ```mermaid
+%%{init: {
+  'theme': 'neutral',
+  'themeVariables': {
+    'primaryColor': '#f4f4f4',
+    'primaryTextColor': '#333',
+    'primaryBorderColor': '#ddd',
+    'lineColor': '#666',
+    'secondaryColor': '#f0f7ff',
+    'tertiaryColor': '#fff'
+  }
+}}%%
 flowchart TD
  subgraph capture["Захват и регистрация лида"]
     newLead["Новый лид"] --> multiChannel["Мультиканальный захват
